@@ -6,16 +6,15 @@
     <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.css">
     <script src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link rel="stylesheet" href="mystyle.css" type="text/css">
-    <script language="JavaScript" src="getStudentInfo.js">
-    </script>
+
     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
 <body>
-    <form name="myForm" onsubmit="getStuInfo()">
+    <form name="myForm">
         <p class="t1">成绩单</p>
-        <table class="table table-hover">
+        <table class="table table-hover" id="myTable">
             <tr>
                 <td>姓名</td>
                 <td>数学</td>
@@ -29,14 +28,15 @@
         <div class="info">
             <p>请输入学生信息（格式：姓名, 学号, 民族, 班级, 学科: 成绩, ...）</p>
             <input id="sInfo" type="text" placeholder="请输入学生信息" class="in1"></input>
-            <input type="submit" value="提交" />
+            <input type="button" value="提交" id="addInfo"/>
         </div>
         <div class="querystu">
             <p>请输入学生信息（格式：学号, 学号, ...）</p>
             <input id="items" type="text" placeholder="请输入要查询的学生学号" class="in1"></input>
-            <input id="queryItem" type="button" value="查询" onclick="queryitems()"></input>
+            <input id="queryItem" type="button" value="查询" ></input>
         </div>
-
     </form>
+    <script language="JavaScript" src="getStudentInfo.js">
+    </script>
 </body>
 </html>

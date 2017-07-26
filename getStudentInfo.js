@@ -2,83 +2,82 @@
  * Created by muzrea on 17-7-24.
  */
 'use strict';
-function getStuInfo(){
+document.getElementById("addInfo").onclick = function getStuInfo(){
+    let myLocalStorage = localStorage;
     let sInfos = document.getElementById("sInfo").value;
     let item = sInfos.slice().split('，');
     let sno=`${item[1]}`;
-    localStorage.setItem(sno,sInfos);
-    let s1 = localStorage.sInfo;
-    let str = '学生'+s1.toString()+'成绩已被添加';
+    myLocalStorage.setItem(sno,sInfos);
+    let s1 = myLocalStorage.sno;
+    let str = '学生'+` ${sno}` +'成绩已被添加';
     alert(str);
+    return false;
 }
-getStuInfo();
-
-document.getElementById("queryItem").onclick= function queryitems(){
-    alert(success);
-    let stuItems = document.getElementById("items").value;
-    let stuItem = stuItems.slice().split('，');
-    let requiredItems = {};
+function addfilter(myLocalStorage){
+    let result = new Boolean();
     for(let i in stuItem){
-        for(let j=0;j<localStorage.length;j++){
-            if(stuItem[i]==localStorage.sno(j)){
-                requiredItems[i].sno=stuItem[i];
-                requiredItems.push(localStorage.sno(j));
+        for(let j=0;j<myLocalStorage.length;j++){
+            if(stuItem[i]==myLocalStorage.sno(j)){
+                result = true;
+            }else{
+                result = false;
             }
         }
     }
-    return requiredItems;
-    // function showItems(requiredItems){
-    // }
-    function showTable(requiredItems) {
-        wi('<table border="1" width="300" style="border-collapse:collapse"><tbody id="table">');
-        for (let i = 0; i < requiredItems.length; i++) {
-
-            wi('<tr bgcolor=' + bg + '><td>第' + (i + 1) + '行</td></tr>');
-        }
-        wi('</tbody></table><br />');
-        wi('<input type="button" value="Add" id="add" />');
+    return result;
+}
+//打印出所有学生信息
+window.onload = function showstu(){
+    //把localStorage中的每个学生的信息的字符串转化为对象allInfo
+    let allInfo = {};
+    let sno = [];
+    let information = [];
+    localStorage.removeItem(undefined);
+    for(let j=0;j<localStorage.length;j++){
+        sno[j] =  localStorage.key(j);
+        allInfo.snos = [];
+        allInfo.snos[j] = sno[j];
+        information[j] = localStorage[sno[j]].split('，');
     }
-
+    allInfo.name =[];
+    allInfo.math =[];
+    allInfo.chinese =[];
+    allInfo.english =[];
+    allInfo.code =[];
+    for(let i in information){
+        allInfo.name[i] = information[i][0];
+        allInfo.math[i] = information[i][4];
+        allInfo.chinese[i] = information[i][5];
+        allInfo.english[i] = information[i][6];
+        allInfo.code[i] = information[i][7];
+    }
+    //在页面显示
+    let getStuInfo = ' ';
+    for(let i=0;i<allInfo.name.length;i++){
+        getStuInfo += "<tr>"+"<td>"+` ${allInfo.name[i]}`+"</td>"
+            +"<td>" +` ${allInfo.math[i]}`+"</td>"
+            +"<td>" +` ${allInfo.chinese[i]}`+"</td>"
+            +"<td>" +` ${allInfo.english[i]}`+"</td>"
+            +"<td>" +` ${allInfo.code[i]}`+"</td>"+"</tr>";
+    }
+    $("#myTable").append(getStuInfo);
+    return allInfo;
 }
 
-
-
-
-function wi(str) {
-    return document.write(str);
+//通过学号查询学生信息
+document.getElementById("queryItem").onclick = function getStuInfo(){
+    let inputSno = document.getElementById("items").value;
+    inputSno.split('，');
+    let allInfo = showstu();
+    let requiredItems = {};
+    for(let i in inputSno){
+        for(let j in allInfo){
+            if(inputSno[i]==allInfo.snos[j]){
+                requiredItems.push(allInfo[j]);
+            }
+        }
+    }
 }
-showTable(10);
-var add = document.getElementById("add");
-add.onclick = function() {
-    let n = n + 1;
-
-    var table = document.getElementById("table");
-    var tr = document.createElement("tr");
-    tr.bgColor = bg;
-    var td = document.createElement("td");
-    td.innerHTML = '第' + (10 + n) + '行';
-    tr.appendChild(td);
-    table.appendChild(tr);
-}
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    // execute when DOM content is loaded
-    document.getElementById('my-form').addEventListener('submit', function (event) {
-
-        event.preventDefault();
-        let firstNameArray = document.getElementsByName('firstname');
-        printSomething(firstNameArray[0].value);
-
-        return false;
-    })
-
-});
-
-
-
-
-
 
 
 
