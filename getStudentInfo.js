@@ -27,7 +27,7 @@ function addfilter(myLocalStorage){
     return result;
 }
 //打印出所有学生信息
-window.onload = function showstu(){
+window.onload = function showStu(){
     //把localStorage中的每个学生的信息的字符串转化为对象allInfo
     let allInfo = {};
     let sno = [];
@@ -35,30 +35,26 @@ window.onload = function showstu(){
     localStorage.removeItem(undefined);
     for(let j=0;j<localStorage.length;j++){
         sno[j] =  localStorage.key(j);
-        allInfo.snos = [];
-        allInfo.snos[j] = sno[j];
+        allInfo[j] = {};
+        allInfo[j].snos = sno[j];
         information[j] = localStorage[sno[j]].split('，');
     }
-    allInfo.name =[];
-    allInfo.math =[];
-    allInfo.chinese =[];
-    allInfo.english =[];
-    allInfo.code =[];
-    for(let i in information){
-        allInfo.name[i] = information[i][0];
-        allInfo.math[i] = information[i][4];
-        allInfo.chinese[i] = information[i][5];
-        allInfo.english[i] = information[i][6];
-        allInfo.code[i] = information[i][7];
+    for(let i=0;i<information.length;i++){
+        allInfo[i] = {};
+        allInfo[i].name = information[i][0];
+        allInfo[i].math = information[i][4];
+        allInfo[i].chinese = information[i][5];
+        allInfo[i].english = information[i][6];
+        allInfo[i].code = information[i][7];
     }
     //在页面显示
     let getStuInfo = ' ';
-    for(let i=0;i<allInfo.name.length;i++){
-        getStuInfo += "<tr>"+"<td>"+` ${allInfo.name[i]}`+"</td>"
-            +"<td>" +` ${allInfo.math[i]}`+"</td>"
-            +"<td>" +` ${allInfo.chinese[i]}`+"</td>"
-            +"<td>" +` ${allInfo.english[i]}`+"</td>"
-            +"<td>" +` ${allInfo.code[i]}`+"</td>"+"</tr>";
+    for(let i=0;i<information.length;i++){
+         getStuInfo += "<tr>" +"<td>" +` ${allInfo[i].name}`+"</td>"
+             +"<td>" +` ${allInfo[i].math}`+"</td>"
+             +"<td>" +` ${allInfo[i].chinese}`+"</td>"
+             +"<td>" +` ${allInfo[i].english}`+"</td>"
+             +"<td>" +` ${allInfo[i].code}`+"</td>"+"</tr>";
     }
     $("#myTable").append(getStuInfo);
     return allInfo;
@@ -68,15 +64,30 @@ window.onload = function showstu(){
 document.getElementById("queryItem").onclick = function getStuInfo(){
     let inputSno = document.getElementById("items").value;
     inputSno.split('，');
-    let allInfo = showstu();
+    for(let i in inputSno){
+        document.getElementById('myTable').deleteRow(i+1);
+    }
+    let allInfo = showStu();
     let requiredItems = {};
     for(let i in inputSno){
         for(let j in allInfo){
-            if(inputSno[i]==allInfo.snos[j]){
+            if(inputSno[i]==allInfo[j].snos){
                 requiredItems.push(allInfo[j]);
             }
         }
     }
+    //在页面显示
+    let getRequiredItems = ' ';
+    for(let i=0;i<inputSno.length;i++){
+        getRequiredItems += "<tr class='active'>" +"<td>" +` ${getRequiredItems[i].name}`+"</td>"
+            +"<td>" +` ${getRequiredItems[i].math}`+"</td>"
+            +"<td>" +` ${getRequiredItems[i].chinese}`+"</td>"
+            +"<td>" +` ${getRequiredItems[i].english}`+"</td>"
+            +"<td>" +` ${getRequiredItems[i].code}`+"</td>"
+            +"<td><input type='button' value='修改' ></input></td>"
+            +"<td><input type='button' value='删除' ></td>"+"</tr>";
+    }
+    $("#myTable").append(getRequiredItems);
 }
 
 
